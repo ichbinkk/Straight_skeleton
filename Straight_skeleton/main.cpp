@@ -1,7 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-//#include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
@@ -186,7 +185,9 @@ int main()
 
 		///////////定义投影矩阵和范围////////////////
 		glm::mat4 proj;
-		proj = glm::ortho(-5.0f, 15.0f, -5.0f, 15.0f, -1.0f, 1.0f);
+		float maxValue = *max_element(vertices.begin(), vertices.end()) * 1.1;
+		float minValue = *min_element(vertices.begin(), vertices.end()) * 1.1;
+		proj = glm::ortho(minValue, maxValue, minValue, maxValue, -1.0f, 1.0f);
 		// Get a handle for our "MVP" uniform.
 		// Only at initialisation time.
 		GLuint MatrixID = glGetUniformLocation(shaderProgram, "proj");
@@ -203,8 +204,16 @@ int main()
 		// draw our first triangle
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+		
+		
 		//glDrawArrays(GL_LINE_LOOP, 0, myVertices.size()/3);
-		glDrawArrays(GL_LINE_LOOP, 0, vertices.size() / 3);
+		numOfPoints num = getNumOfPoints();
+		GLint first = 0;
+		for (int i = 0; i < num.size(); i++) {			
+			glDrawArrays(GL_LINE_LOOP, first, num[i]);
+			first = first + num[i];
+		}
+
 		// glBindVertexArray(0); // no need to unbind it every time 
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

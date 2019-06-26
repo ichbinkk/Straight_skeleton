@@ -20,8 +20,12 @@
 	typedef bg::model::polygon<point, false, false> polygon; // ccw, open polygon
 	typedef std::pair<box, unsigned> value;
 	typedef std::vector<polygon> myPolygons;
+	typedef std::vector<int> indexOfPolygons;
+	typedef std::vector<int> numOfPoints;
 
 
-
+	
 	myPolygons getPolygons();
+	indexOfPolygons getIndexOfPolygons();
+	numOfPoints getNumOfPoints();
 //}

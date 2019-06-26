@@ -1,4 +1,5 @@
 #include "bg_polygons.h"
+#include <fstream>
 
 //定义需要的数据结构
 //namespace bg = boost::geometry;
@@ -12,27 +13,77 @@
 
 //namespace bgp {
 
+indexOfPolygons IBO;
+numOfPoints NOP;
 	myPolygons getPolygons()
 	{
 		// polygons
 		std::vector<polygon> polygons;
 
+		
 		// create some polygons
-		for (unsigned i = 0; i < 10; ++i)
-		{
-			// create a polygon
-			polygon p;
-			for (float a = 0; a < 6.28316f; a += 1.04720f)
-			{
-				float x = i + int(10 * ::cos(a))*0.1f;
-				float y = i + int(10 * ::sin(a))*0.1f;
-				p.outer().push_back(point(x, y));
+		//for (unsigned i = 0; i < 10; ++i)
+		//{
+		//	// create a polygon
+		//	polygon p;
+		//	for (float a = 0; a < 6.28316f; a += 1.04720f)
+		//	{
+		//		float x = i + int(10 * ::cos(a))*0.1f;
+		//		float y = i + int(10 * ::sin(a))*0.1f;
+		//		p.outer().push_back(point(x, y));
+		//	}
+
+		//	// add polygon
+		//	polygons.push_back(p);			
+		//}
+
+		// create polygons from *.txt file
+		std::ifstream in;
+		in.open("1", std::ios::in);
+		std::string buff,res;		
+		polygon p;
+		int l = 0; //定义行的序号初始为0
+		//开始按行读取
+		while (std::getline(in ,buff)) {
+			//每行字符串按空格读取
+			std::stringstream input(buff);
+			//std::cout << "line_info: "<< buff << std::endl;
+			
+			float t[2] = {0};
+			int i = 0;
+			
+			while (input >> res) {
+				 float res_f;
+				 res_f = atof(res.c_str());
+				 t[i++] = res_f;
+				if (res_f < 100 && !p.outer().empty()){
+						// add polygon to polygons
+						polygons.push_back(p);
+						//保存polygon最后一点所在的行和点数
+						IBO.push_back(p.outer().size()*3);
+						NOP.push_back(p.outer().size());
+						//clear added polygon
+						p.outer().clear();
+				}				
+			}
+			
+			l++;
+			if (l > 683) {
+				std::cout << l << std::endl;
 			}
 
-			// add polygon
-			polygons.push_back(p);
-
+			//如果长度小于2 跳出本轮循环进行下一轮循环
+			if (t[0] < 100)
+				continue;
+			p.outer().push_back(point(t[0]/1000, t[1]/1000));
+			
 		}
+		//添加最后一个多边形
+		// add polygon to polygons
+		polygons.push_back(p);
+		//保存polygon最后一点所在的行和点数
+		IBO.push_back(p.outer().size()*3);
+		NOP.push_back(p.outer().size());
 
 		// display polygons
 		std::cout << "generated polygons:" << std::endl;
@@ -93,4 +144,15 @@
 
 		return polygons;
 	}
+	
+	indexOfPolygons getIndexOfPolygons()
+	{		
+		return IBO;
+	}
+
+	numOfPoints getNumOfPoints()
+	{
+		return NOP;
+	}
+
 //}
