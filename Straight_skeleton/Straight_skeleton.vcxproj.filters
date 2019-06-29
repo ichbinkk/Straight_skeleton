@@ -18,6 +18,9 @@
     <ClInclude Include="bg_polygons.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="dump_to_eps.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bg_polygons.cpp">
@@ -30,6 +33,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="D:\Env\modernOpengl\include\glad.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="connectivity_extraction.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="multi_polygon.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

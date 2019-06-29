@@ -22,6 +22,33 @@ typedef CGAL::Straight_skeleton_2<K>  Straight_skeleton ;
 
 typedef boost::shared_ptr<Straight_skeleton> Straight_skeleton_ptr ;
 
+template<class S>
+void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton, std::ostream& rOut)
+{
+	typedef typename CGAL::Straight_skeleton_2<S>::Halfedge_const_iterator Halfedge_const_iterator;
+	typedef typename CGAL::Straight_skeleton_2<S>::Halfedge_const_handle   Halfedge_const_handle;
+
+	for (Halfedge_const_iterator hit = aSkeleton.halfedges_begin(); hit != aSkeleton.halfedges_end(); ++hit)
+	{
+		Halfedge_const_handle h = hit;
+
+		int scale = 1;
+
+		if (h->is_bisector() && ((h->id() % 2) == 0) && !h->has_infinite_time() && !h->opposite()->has_infinite_time())
+		{
+
+			rOut << scale * h->vertex()->point().x()
+				<< " "
+				<< scale * h->vertex()->point().y()
+				<< "\n"
+				<< scale * h->opposite()->vertex()->point().x()
+				<< " "
+				<< scale * h->opposite()->vertex()->point().y()
+				<< "\n";
+		}
+	}
+}
+
 //int main( int argc, char* argv[] )
 //{
 //  Polygon_with_holes input ;
@@ -38,6 +65,12 @@ typedef boost::shared_ptr<Straight_skeleton> Straight_skeleton_ptr ;
 //      is >> input ;
 //      
 //      Straight_skeleton_ptr ss = CGAL::create_interior_straight_skeleton_2(input);
+
+//		Êä³öµ½txt
+//		std::string  txt_name = name + ".skeleton.txt";
+//		std::ofstream f(txt_name.c_str());
+//		dump_to_txt(*ss, f);
+
 //      if ( ss )
 //      {
 //        std::string eps_name ;

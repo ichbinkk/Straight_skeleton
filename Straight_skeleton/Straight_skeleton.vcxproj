@@ -124,11 +124,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="bg_polygons.h" />
+    <ClInclude Include="dump_to_eps.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bg_polygons.cpp" />
+    <ClCompile Include="connectivity_extraction.cpp" />
     <ClCompile Include="D:\Env\modernOpengl\include\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="multi_polygon.cpp" />
     <ClCompile Include="Show_straight_skeleton.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
