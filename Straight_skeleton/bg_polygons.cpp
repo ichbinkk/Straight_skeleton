@@ -127,22 +127,11 @@ myPolygons getPolygons()
 			}
 			else
 				break;
-			
-			//如果和之前的环相离，即同级内环
-			//else {
-			//index_mpolygon++;				
-		/*	mpoly.resize(index_mpolygon + 1);
-			index_inners = 0;*/
-			//	index_inners++;
-			//	mpoly[index_mpolygon].inners().resize(index_inners + 1);
-			//	
-			//	toInners(mpoly, p);								
-			//}
 		}
 		else
 			break;
 	}
-	/////索引指向正确位置
+	/////索引指向正确位置/////
 	if (ii < polygons.size()) {
 		index_mpolygon++;
 		mpoly.resize(index_mpolygon + 1);
@@ -162,14 +151,17 @@ myPolygons getPolygons()
 		}
 		//一个多边形的外环，且必是最后一个添加；或者是个孤岛
 		else {
-			mpoly.resize(index_mpolygon + 1);
-			toOuter(mpoly, p);
 
-			index_inners = 0;
+			toOuter(mpoly, p);
+			
 			index_mpolygon++;
+			mpoly.resize(index_mpolygon + 1);
+			index_inners = 0;
 		}
 		ii++;
 	}
+
+
 
 
 	//for (auto it = polygons.begin(); it != polygons.end(); ++it) {
@@ -240,6 +232,11 @@ myPolygons getPolygons()
 		std::cout << bg::wkt<polygon>(polygons[v.second]) << std::endl;
 
 	return polygons;
+}
+
+mpolygon_t getMpolygons()
+{
+	return mpoly;
 }
 	
 indexOfPolygons getIndexOfPolygons()

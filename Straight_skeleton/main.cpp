@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "bg_polygons.h"
+#include "Show_straight_skeleton.cpp"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -32,6 +33,8 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
+	show_straight_skeleton();
+
 	// glfw: initialize and configure
 	// ------------------------------
 	glfwInit();
