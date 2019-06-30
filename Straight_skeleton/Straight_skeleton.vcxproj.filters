@@ -21,6 +21,9 @@
     <ClInclude Include="dump_to_eps.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Show_straight_skeleton.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bg_polygons.cpp">

@@ -125,6 +125,7 @@
   <ItemGroup>
     <ClInclude Include="bg_polygons.h" />
     <ClInclude Include="dump_to_eps.h" />
+    <ClInclude Include="Show_straight_skeleton.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bg_polygons.cpp" />
