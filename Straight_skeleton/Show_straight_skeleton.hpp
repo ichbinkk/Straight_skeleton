@@ -24,6 +24,9 @@ typedef CGAL::Straight_skeleton_2<K>  Straight_skeleton;
 
 typedef boost::shared_ptr<Straight_skeleton> Straight_skeleton_ptr;
 
+//全局变量 输出txt
+std::ofstream f("test.skeleton.txt");
+
 template<class S>
 void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton, std::ostream& rOut)
 {
@@ -39,7 +42,7 @@ void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton, std::ostream& rO
 		if (h->is_bisector() && ((h->id() % 2) == 0) && !h->has_infinite_time() && !h->opposite()->has_infinite_time())
 		{
 
-			rOut << scale * h->vertex()->point().x()
+			f << scale * h->vertex()->point().x()
 				<< " "
 				<< scale * h->vertex()->point().y()
 				<< "\n"
@@ -59,58 +62,74 @@ void show_straight_skeleton()
 	{
 		std::string name = "test";
 		std::cout << "Input file: " << name << std::endl;
-		std::stringstream is(name.c_str());
+		std::stringstream is;
 
 		if (is)
 		{
-			BOOST_FOREACH(polygon p, getMpolygons()) {
-				BOOST_FOREACH(point outer, p.outer()) {
-					using boost::geometry::get;
-					is << p.outer().size() << std::endl;
+			mpolygon_t mp = getMpolygons();
+			//可以指定某个特定的多边形
+			int q = 0,res_p = 0;
+			//遍历所有mpolygon
+			BOOST_FOREACH(polygon p, mp) {
+				//输入outer
+				is << p.outer().size() << std::endl;
+				BOOST_FOREACH(auto outer, p.outer()) {
+					using boost::geometry::get;					
 					is << get<0>(outer) << " " << get<1>(outer) << std::endl;
 				}
-				if (p.inners().size() > 1) {
-					is << p.inners().size() << std::endl;
+				//输入inners
+				if (p.inners().size() > 0) {
+					is << p.inners().size() << std::endl;						
 					BOOST_FOREACH(auto inner, p.inners()) {
+						is << inner.size() << std::endl;
 						BOOST_FOREACH(point in, inner) {
-							using boost::geometry::get;
-							is << inner.size() << std::endl;
+							using boost::geometry::get;							
 							is << get<0>(in) << " " << get<1>(in) << std::endl;
 						}
 					}
 				}
-			}
-			is >> input;
 
-			Straight_skeleton_ptr ss = CGAL::create_interior_straight_skeleton_2(input);
+				//stringstream to "input"
+				is >> input;
+				Straight_skeleton_ptr ss = CGAL::create_interior_straight_skeleton_2(input);
+				dump_to_txt(*ss, f);
+				
+				q++;
+				if (q == res_p)
+					break;
+			}			
 
-			//输出到txt
-			std::string  txt_name = name + ".skeleton.txt";
-			std::ofstream f(txt_name.c_str());
-			dump_to_txt(*ss, f);
+			//测试stringstream is有没有输出
+			std::cout << is.str();
+			
+			//输出到 txt
+			//std::string  txt_name = name + ".skeleton.txt";
+			
+			
+		//输出eps
+		//	if (1)
+		//	{
+		//		std::string eps_name;
+		//		if (0)
+		//			eps_name = ".skeleton.eps";
+		//		else eps_name = name + ".skeleton.eps";
 
-			if (ss)
-			{
-				std::string eps_name;
-				if (0)
-					eps_name = ".skeleton.eps";
-				else eps_name = name + ".skeleton.eps";
+		//		std::ofstream eps(eps_name.c_str());
+		//		if (eps)
+		//		{
+		//			std::cerr << "Result: " << eps_name << std::endl;
+		//			dump_to_eps(input, *ss, eps);
+		//		}
+		//		else
+		//		{
+		//			std::cerr << "Could not open result file: " << eps_name << std::endl;
+		//		}
+		//	}
+		//	else
+		//	{
+		//		std::cerr << "ERROR creating interior straight skeleton" << std::endl;
+		//	}
 
-				std::ofstream eps(eps_name.c_str());
-				if (eps)
-				{
-					std::cerr << "Result: " << eps_name << std::endl;
-					dump_to_eps(input, *ss, eps);
-				}
-				else
-				{
-					std::cerr << "Could not open result file: " << eps_name << std::endl;
-				}
-			}
-			else
-			{
-				std::cerr << "ERROR creating interior straight skeleton" << std::endl;
-			}
 		}
 		else
 		{
@@ -127,5 +146,4 @@ void show_straight_skeleton()
 			<< "         (See input_file_format.txt for details)" << std::endl
 			<< "       output_file     [default='innput_file.skeleton.eps']" << std::endl;
 	}
-
 }

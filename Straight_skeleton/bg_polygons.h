@@ -33,6 +33,7 @@ typedef bg::model::multi_polygon<polygon> mpolygon_t; /*< Clockwise, closed mult
 	
 myPolygons getPolygons();
 mpolygon_t getMpolygons();
+
 indexOfPolygons getIndexOfPolygons();
 numOfPoints getNumOfPoints();
 

@@ -33,7 +33,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 int main()
 {
-	//show_straight_skeleton();
+
 
 	// glfw: initialize and configure
 	// ------------------------------
@@ -110,6 +110,9 @@ int main()
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	myPolygons polygons = getPolygons();
+	
+	show_straight_skeleton();
+	
 	/*std::vector<float> myVertices;
 	for (int i = 0; i < polygons.size(); i++) {
 				polygon a = polygons[i];
