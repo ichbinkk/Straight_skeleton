@@ -25,7 +25,8 @@ typedef CGAL::Straight_skeleton_2<K>  Straight_skeleton;
 typedef boost::shared_ptr<Straight_skeleton> Straight_skeleton_ptr;
 
 //全局变量 输出txt
-std::ofstream f("test.skeleton.txt");
+std::string txtname = "test.skeleton.txt";
+std::ofstream f(txtname.c_str());
 
 template<class S>
 void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton, std::ostream& rOut)
@@ -57,7 +58,7 @@ void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton, std::ostream& rO
 void show_straight_skeleton()
 {
 	Polygon_with_holes input;
-
+	
 	if (1)
 	{
 		std::string name = "test";
@@ -67,40 +68,50 @@ void show_straight_skeleton()
 		if (is)
 		{
 			mpolygon_t mp = getMpolygons();
-			//可以指定某个特定的多边形
+			//可以指定计算到某个特定的多边形
 			int q = 0,res_p = 0;
 			//遍历所有mpolygon
-			BOOST_FOREACH(polygon p, mp) {
+			for (int i = 0; i < mp.size() - 1; i++) {
+
+				polygon p = mp[i];
 				//输入outer
 				is << p.outer().size() << std::endl;
 				BOOST_FOREACH(auto outer, p.outer()) {
-					using boost::geometry::get;					
+					using boost::geometry::get;
 					is << get<0>(outer) << " " << get<1>(outer) << std::endl;
 				}
 				//输入inners
 				if (p.inners().size() > 0) {
-					is << p.inners().size() << std::endl;						
+					is << p.inners().size() << std::endl;
 					BOOST_FOREACH(auto inner, p.inners()) {
 						is << inner.size() << std::endl;
 						BOOST_FOREACH(point in, inner) {
-							using boost::geometry::get;							
+							using boost::geometry::get;
 							is << get<0>(in) << " " << get<1>(in) << std::endl;
 						}
 					}
 				}
+				is << std::endl;
+				//测试stringstream is有没有输出
+				std::cout << is.str();
 
-				//stringstream to "input"
+				//convert stringstream to "input"
 				is >> input;
 				Straight_skeleton_ptr ss = CGAL::create_interior_straight_skeleton_2(input);
 				dump_to_txt(*ss, f);
+
+				is.str("");
+				is.clear();
 				
+				input.clear();
+				ss.reset();
+
 				q++;
 				if (q == res_p)
 					break;
 			}			
 
-			//测试stringstream is有没有输出
-			std::cout << is.str();
+			
 			
 			//输出到 txt
 			//std::string  txt_name = name + ".skeleton.txt";
