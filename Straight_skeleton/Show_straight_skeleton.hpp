@@ -29,7 +29,7 @@ std::string txtname = "test.skeleton.txt";
 std::ofstream f(txtname.c_str());
 
 template<class S>
-void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton, std::ostream& rOut)
+void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton)
 {
 	typedef typename CGAL::Straight_skeleton_2<S>::Halfedge_const_iterator Halfedge_const_iterator;
 	typedef typename CGAL::Straight_skeleton_2<S>::Halfedge_const_handle   Halfedge_const_handle;
@@ -71,7 +71,7 @@ void show_straight_skeleton()
 			//可以指定计算到某个特定的多边形
 			int q = 0,res_p = 0;
 			//遍历所有mpolygon
-			for (int i = 0; i < mp.size() - 1; i++) {
+			for (int i = 6; i < mp.size() - 1; i++) {
 
 				polygon p = mp[i];
 				//输入outer
@@ -98,12 +98,13 @@ void show_straight_skeleton()
 				//convert stringstream to "input"
 				is >> input;
 				Straight_skeleton_ptr ss = CGAL::create_interior_straight_skeleton_2(input);
-				dump_to_txt(*ss, f);
+				dump_to_txt(*ss);
 
 				is.str("");
 				is.clear();
 				
 				input.clear();
+				
 				ss.reset();
 
 				q++;
