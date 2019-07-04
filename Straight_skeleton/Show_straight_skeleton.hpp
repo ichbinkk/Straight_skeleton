@@ -38,7 +38,7 @@ void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton)
 	{
 		Halfedge_const_handle h = hit;
 
-		int scale = 1;
+		int scale = 1000;
 
 		if (h->is_bisector() && ((h->id() % 2) == 0) && !h->has_infinite_time() && !h->opposite()->has_infinite_time())
 		{
@@ -57,23 +57,26 @@ void dump_to_txt(CGAL::Straight_skeleton_2<S> const& aSkeleton)
 
 void show_straight_skeleton()
 {
-	Polygon_with_holes input;
+	
 	
 	if (1)
 	{
 		std::string name = "test";
 		std::cout << "Input file: " << name << std::endl;
 		std::stringstream is;
-
+		//std::fstream is;
+		Straight_skeleton_ptr ss;
+		
 		if (is)
 		{
 			mpolygon_t mp = getMpolygons();
 			//可以指定计算到某个特定的多边形
 			int q = 0,res_p = 0;
 			//遍历所有mpolygon
-			for (int i = 6; i < mp.size() - 1; i++) {
+			for (int i = 0; i < mp.size()-1; i++) {
 
 				polygon p = mp[i];
+				Polygon_with_holes input;
 				//输入outer
 				is << p.outer().size() << std::endl;
 				BOOST_FOREACH(auto outer, p.outer()) {
@@ -92,17 +95,23 @@ void show_straight_skeleton()
 					}
 				}
 				is << std::endl;
+
+				
+
 				//测试stringstream is有没有输出
-				std::cout << is.str();
+				//std::cout << is.str();
 
 				//convert stringstream to "input"
 				is >> input;
-				Straight_skeleton_ptr ss = CGAL::create_interior_straight_skeleton_2(input);
+				//测试input有没有输出
+				std::cout << input;
+
+				ss = CGAL::create_interior_straight_skeleton_2(input);
 				dump_to_txt(*ss);
 
 				is.str("");
 				is.clear();
-				
+								
 				input.clear();
 				
 				ss.reset();
@@ -110,8 +119,7 @@ void show_straight_skeleton()
 				q++;
 				if (q == res_p)
 					break;
-			}			
-
+			}
 			
 			
 			//输出到 txt
